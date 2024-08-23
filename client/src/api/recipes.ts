@@ -15,10 +15,19 @@ export const fetchRecipeById = async (id: string) => {
     }
   }
 };
-export const fetchRecipes = async () => {
+export const fetchRecipes = async (page: number = 1, search: string = "") => {
   try {
-    const response = await axios.get<{ recipes: Recipe[] }>(API_URL);
-    return response.data.recipes;
+    const response = await axios.get<{
+      recipes: Recipe[];
+      totalPages: number;
+    }>(API_URL, {
+      params: { page, search },
+    });
+
+    return {
+      recipesData: response.data.recipes,
+      totalPages: response.data.totalPages,
+    };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.message);

@@ -1,29 +1,14 @@
-import { useState, FormEvent, FC, useCallback, ChangeEvent } from "react";
+import { useState, FC, } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar: FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     navigate("/");
   };
-
-  const handleSearch = useCallback(
-    (e: FormEvent<HTMLFormElement>): void => {
-      e.preventDefault();
-      console.log("Searching for:", searchQuery);
-    },
-    [searchQuery]
-  );
-  const handleInputChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>): void => {
-      setSearchQuery(e.target.value);
-    },
-    []
-  );
 
   return (
     <nav className="bg-gray-800 p-4">
@@ -32,24 +17,6 @@ const Navbar: FC = () => {
           Recipe App
         </Link>
 
-        <form
-          onSubmit={handleSearch}
-          className="flex flex-1 justify-center mx-4"
-        >
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={handleInputChange}
-            className="p-2 w-full max-w-lg rounded-l-md"
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 p-2 rounded-r-md text-white"
-          >
-            Search
-          </button>
-        </form>
 
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
