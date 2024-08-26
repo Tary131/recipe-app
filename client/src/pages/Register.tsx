@@ -14,7 +14,7 @@ const Register: FC = () => {
       setError(null);
 
       try {
-        await registerUser(email, password); // Use the API function
+        await registerUser(email, password);
         alert("User registered successfully");
       } catch (error) {
         if (error instanceof Error) {
