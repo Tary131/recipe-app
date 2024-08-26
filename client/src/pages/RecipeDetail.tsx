@@ -20,7 +20,7 @@ const RecipeDetail: FC = () => {
         setLoading(true);
         setError(null);
         if (id) {
-          const recipeData = await fetchRecipeById(id); // Use the API function
+          const recipeData = await fetchRecipeById(id);
           dispatch(setSelectedRecipe(recipeData));
         }
       } catch (error) {
