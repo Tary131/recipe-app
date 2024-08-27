@@ -1,13 +1,18 @@
-import { useState, FC, } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store"; // Adjust the import to your store's path
+import { logout } from "../features/authSlice";
 
-const Navbar: FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const Navbar: React.FC = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
-    navigate("/");
+    window.confirm("Are you sure you want to log out?");
+    dispatch(logout());
+    navigate("/login");
   };
 
   return (
@@ -17,9 +22,8 @@ const Navbar: FC = () => {
           Recipe App
         </Link>
 
-
         <div className="flex items-center space-x-4">
-          {isAuthenticated ? (
+          {user ? (
             <>
               <Link to="/profile" className="text-white">
                 Profile
