@@ -30,7 +30,7 @@ const Login: FC = () => {
           }
         )
         .then(() => {
-          navigate("/target-page");
+          navigate("/", { state: { message: "Login successful!" } });
         })
         .finally(() => {
           setLoading(false);

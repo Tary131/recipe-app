@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import RecipeCard from "../components/RecipeCard";
@@ -7,6 +7,9 @@ import Search from "../components/Search";
 import { useFetchRecipes } from "../hooks/useFetchRecipes";
 import RecipeCardSkeleton from "../components/Skeletons/RecipeCardSkeleton";
 import PaginationSkeleton from "../components/Skeletons/PaginationSkeleton";
+import { useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RecipeLists = () => {
   const recipes = useSelector((state: RootState) => state.recipes.recipes);
@@ -17,7 +20,12 @@ const RecipeLists = () => {
     currentPage,
     searchQuery
   );
-
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.message) {
+      toast.success(location.state.message);
+    }
+  }, [location.state]);
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -31,32 +39,35 @@ const RecipeLists = () => {
   if (recipes.length === 0 && !loading) return <p>No recipes found.</p>;
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Recipes</h1>
-      <Search
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        onSearch={handleSearch}
-      />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {loading
-          ? Array.from({ length: 8 }).map((_, index) => (
-              <RecipeCardSkeleton key={index} />
-            ))
-          : recipes.map((recipe) => (
-              <RecipeCard key={recipe._id} recipe={recipe} />
-            ))}
-      </div>
-      {loading ? (
-        <PaginationSkeleton />
-      ) : (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
+    <>
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-6">Recipes</h1>
+        <Search
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          onSearch={handleSearch}
         />
-      )}
-    </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {loading
+            ? Array.from({ length: 8 }).map((_, index) => (
+                <RecipeCardSkeleton key={index} />
+              ))
+            : recipes.map((recipe) => (
+                <RecipeCard key={recipe._id} recipe={recipe} />
+              ))}
+        </div>
+        {loading ? (
+          <PaginationSkeleton />
+        ) : (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </div>
+      <ToastContainer />
+    </>
   );
 };
 
