@@ -1,10 +1,11 @@
-import { useState, FC, FormEvent, useCallback, ChangeEvent } from "react";
+import { useState, FC, FormEvent, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { login as loginApi } from "../api/auth";
 import { login } from "../features/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LoginForm from "../components/LoginForm";
 
 const Login: FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -17,6 +18,7 @@ const Login: FC = () => {
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setLoading(true);
+
       toast
         .promise(
           loginApi(email, password).then(({ user, token }) => {
@@ -39,57 +41,39 @@ const Login: FC = () => {
     [dispatch, email, navigate, password]
   );
 
-  const handleEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  }, []);
-
-  const handlePasswordChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value);
-    },
-    []
-  );
-
   return (
-    <>
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-md mx-auto p-4"
-        aria-labelledby="login-heading"
-      >
-        <h1 id="login-heading" className="text-xl mb-4">
-          Login
-        </h1>
-        <input
-          type="email"
-          value={email}
-          onChange={handleEmailChange}
-          placeholder="Email"
-          className="block w-full p-2 mb-4 border rounded"
-          aria-label="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-          placeholder="Password"
-          className="block w-full p-2 mb-4 border rounded"
-          aria-label="Password"
-          required
-        />
-        <button
-          type="submit"
-          className={`w-full p-2 rounded ${
-            loading ? "bg-gray-500" : "bg-blue-500"
-          } text-white`}
-          disabled={loading || !email || !password}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+    <section className="bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1
+              id="login-heading"
+              className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
+            >
+              Sign in to your account
+            </h1>
+            <LoginForm
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+              onSubmit={handleSubmit}
+              loading={loading}
+            />
+            <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+              Don’t have an account yet?{" "}
+              <Link
+                to={"/register"}
+                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+              >
+                Sign up
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
       <ToastContainer />
-    </>
+    </section>
   );
 };
 

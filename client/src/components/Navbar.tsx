@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store"; // Adjust the import to your store's path
+import { RootState } from "../store";
 import { logout } from "../features/authSlice";
 
 const Navbar: React.FC = () => {
