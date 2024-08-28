@@ -1,4 +1,5 @@
 import { useState, FormEvent, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import RecipeCard from "../components/RecipeCard";
@@ -7,7 +8,6 @@ import Search from "../components/Search";
 import { useFetchRecipes } from "../hooks/useFetchRecipes";
 import RecipeCardSkeleton from "../components/Skeletons/RecipeCardSkeleton";
 import PaginationSkeleton from "../components/Skeletons/PaginationSkeleton";
-import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,11 +21,15 @@ const RecipeLists = () => {
     searchQuery
   );
   const location = useLocation();
+  const navigate = useNavigate();
+  const message = location.state?.message;
+  const pathname = location.pathname;
   useEffect(() => {
-    if (location.state?.message) {
-      toast.success(location.state.message);
+    if (message) {
+      toast.success(message);
+      navigate(pathname, { replace: true });
     }
-  }, [location.state]);
+  }, [message, pathname, navigate]);
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
