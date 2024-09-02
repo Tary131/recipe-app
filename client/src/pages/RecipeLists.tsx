@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import RecipeCard from "../components/RecipeCard";
-import Pagination from "../components/Pagination";
+import Pagination from "../components/Pagination/Pagination";
 import Search from "../components/Search";
 import { useFetchRecipes } from "../hooks/useFetchRecipes";
 import RecipeCardSkeleton from "../components/Skeletons/RecipeCardSkeleton";
